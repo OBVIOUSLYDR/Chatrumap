@@ -1,13 +1,8 @@
 # Chatrumap
-SourceMod Plugin für CS:GO — !map und !listmaps mit unbegrenzter Mapanzahl (20+ Maps), benutzerdefinierten Namen und Map-spezifischen Server Commands  |  SourceMod plugin for CS:GO — !map and !listmaps with unlimited maps (20+), custom display names and per-map server command support
 
-
-
-
-
-# Chatrumap
-
-Ein SourceMod Plugin für CS:GO Community-Server das Spielern erlaubt Maps über den Chat zu wechseln und alle verfügbaren Maps einzusehen — mit Unterstützung für Map-spezifische Server-Konfigurationen und **unbegrenzter Mapanzahl**.
+> **DE:** SourceMod Plugin für CS:GO – !map und !maplist mit Kategorien, unbegrenzter Mapanzahl (20+ Maps), benutzerdefinierten Namen und Map-spezifischen Server Commands
+>
+> **EN:** SourceMod plugin for CS:GO – !map and !maplist with categories, unlimited maps (20+), custom display names and per-map server command support
 
 ---
 
@@ -16,10 +11,11 @@ Ein SourceMod Plugin für CS:GO Community-Server das Spielern erlaubt Maps über
 ### Features
 
 - `!map <mapname>` — Map wechseln (für alle Spieler nutzbar)
-- `!listmaps` — Zeigt alle verfügbaren Maps mit benutzerdefinierten Namen im Chat
-- **Unbegrenzte Maps** — Keine Begrenzung auf 6 Maps wie beim Standard-Mapchooser, problemlos 20+ Maps möglich
+- `!maplist` — Zeigt alle Kategorien mit Mapanzahl
+- `!maplist <kategorie>` — Zeigt alle Maps einer Kategorie (z.B. `!maplist bhop`)
+- **Unbegrenzte Maps** — Keine 6-Map Begrenzung wie beim Standard-Mapchooser, problemlos 20+ Maps möglich
+- **Kategorien** — Maps nach Typ gruppieren (DE, Bhop, Surf, MG, Aim, AWP, 1vs1 etc.)
 - Map-spezifische Commands — Beim Laden einer Map werden automatisch Server-Commands ausgeführt
-- Semikolon-getrennte Commands oder eine Command pro Zeile
 - Benutzerdefinierte Anzeigenamen für Maps
 - Kein Doppel-Trigger Bug
 
@@ -41,10 +37,20 @@ Ein SourceMod Plugin für CS:GO Community-Server das Spielern erlaubt Maps über
    ```
 4. Server neustarten
 
+### Commands
+
+| Chat Command | Beschreibung |
+|---|---|
+| `!map <mapname>` | Wechselt die Map nach 5 Sekunden |
+| `!maplist` | Zeigt alle Kategorien |
+| `!maplist <kategorie>` | Zeigt alle Maps der Kategorie |
+
 ### maps.cfg Format
 
 ```
 // Kommentare mit //
+
+[Kategoriename]
 mapname "Anzeigename"
 {
     command1
@@ -55,38 +61,40 @@ mapname "Anzeigename"
 ### Beispiel
 
 ```
+[DE Maps]
 de_dust2 "Dust II"
 {
-
+    mp_freezetime 6;bot_kick;mp_restartgame 1
 }
 
+[Bhop]
 bhop_beginner "Bhop Beginner"
 {
-    bot_kick;mp_freezetime 0;sv_airaccelerate 800
-    sv_enablebunnyhopping 1;sv_staminajumpcost 0;sv_staminalandcost 0
+    sv_airaccelerate 800;sv_enablebunnyhopping 1
+    sv_staminajumpcost 0;sv_staminalandcost 0
 }
 
+[Surf]
+surf_mesa "Surf Mesa"
+{
+    sv_airaccelerate 800;sv_friction 0.4
+}
+
+[1vs1]
 1vs1_arena "1vs1 Arena"
 {
     mp_t_default_primary weapon_ak47
     mp_ct_default_primary weapon_ak47
-    mp_t_default_secondary weapon_deagle
-    mp_ct_default_secondary weapon_deagle
 }
 ```
-
-### Commands
-
-| Chat Command | Beschreibung |
-|---|---|
-| `!map <mapname>` | Wechselt die Map nach 5 Sekunden |
-| `!listmaps` | Zeigt alle Maps aus der maps.cfg im Chat |
 
 ### Hinweise
 
 - Zeilen mit `//` werden ignoriert
 - Commands in `{}` werden **3 Sekunden nach Map-Start** ausgeführt
-- Maps ohne Commands erscheinen trotzdem in `!listmaps`
+- Beide Formate unterstützt: `;` getrennt auf einer Zeile oder einzeln untereinander
+- Maps ohne Commands erscheinen trotzdem in `!maplist`
+- Kategorien unterstützen Partial-Match: `!maplist de` findet `DE Maps`
 
 ---
 
@@ -95,10 +103,11 @@ bhop_beginner "Bhop Beginner"
 ### Features
 
 - `!map <mapname>` — change the map (usable by all players)
-- `!listmaps` — shows all available maps with custom display names in chat
+- `!maplist` — shows all categories with map count
+- `!maplist <category>` — shows all maps in a category (e.g. `!maplist bhop`)
 - **Unlimited maps** — no 6-map limit like the default mapchooser, easily supports 20+ maps
+- **Categories** — group maps by type (DE, Bhop, Surf, MG, Aim, AWP, 1vs1 etc.)
 - Per-map command blocks — automatically execute server commands when a specific map loads
-- Supports semicolon-separated commands or one command per line
 - Custom display names for maps
 - No double-trigger bug
 
@@ -120,10 +129,20 @@ bhop_beginner "Bhop Beginner"
    ```
 4. Restart the server
 
+### Commands
+
+| Chat Command | Description |
+|---|---|
+| `!map <mapname>` | Changes the map after 5 seconds |
+| `!maplist` | Shows all categories |
+| `!maplist <category>` | Shows all maps in a category |
+
 ### maps.cfg Format
 
 ```
 // Comments start with //
+
+[Category Name]
 mapname "Display Name"
 {
     command1
@@ -134,38 +153,40 @@ mapname "Display Name"
 ### Example
 
 ```
+[DE Maps]
 de_dust2 "Dust II"
 {
-
+    mp_freezetime 6;bot_kick;mp_restartgame 1
 }
 
+[Bhop]
 bhop_beginner "Bhop Beginner"
 {
-    bot_kick;mp_freezetime 0;sv_airaccelerate 800
-    sv_enablebunnyhopping 1;sv_staminajumpcost 0;sv_staminalandcost 0
+    sv_airaccelerate 800;sv_enablebunnyhopping 1
+    sv_staminajumpcost 0;sv_staminalandcost 0
 }
 
+[Surf]
+surf_mesa "Surf Mesa"
+{
+    sv_airaccelerate 800;sv_friction 0.4
+}
+
+[1vs1]
 1vs1_arena "1vs1 Arena"
 {
     mp_t_default_primary weapon_ak47
     mp_ct_default_primary weapon_ak47
-    mp_t_default_secondary weapon_deagle
-    mp_ct_default_secondary weapon_deagle
 }
 ```
 
-### Commands
-
-| Chat Command | Description |
-|---|---|
-| `!map <mapname>` | Changes the map after 5 seconds |
-| `!listmaps` | Shows all maps from maps.cfg in chat |
-
 ### Notes
 
-- Lines starting with `//` are comments and will be ignored
-- Commands inside `{}` are executed **3 seconds after the map starts**
-- Maps without commands still show up in `!listmaps`
+- Lines starting with `//` are ignored
+- Commands inside `{}` are executed **3 seconds after map start**
+- Both formats supported: `;` separated on one line or one command per line
+- Maps without commands still show up in `!maplist`
+- Categories support partial match: `!maplist de` finds `DE Maps`
 
 ---
 
